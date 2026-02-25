@@ -1,0 +1,10 @@
+name = "Lean-ZFC"
+version = "0.1.0"
+defaultTargets = ["lean-zfc"]
+
+[[lean_lib]]
+name = "LeanZFC"
+
+[[lean_exe]]
+name = "lean-zfc"
+root = "Main"
