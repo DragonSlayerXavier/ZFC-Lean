@@ -157,7 +157,15 @@ theorem dist_imp_conj (A B C : Prop) : (A → (B ∧ C)) ↔ ((A → B) ∧ (A �
   exact ⟨h1, h2⟩
 
 theorem peirce (A B : Prop) : (((A → B) → A) → A) := by
-  sorry
-
+  intro h
+  apply proof_by_contradiction
+  intro hna
+  have hab : A → B := by
+    intro ha
+    apply ex_falso_quod_classical B
+    apply hna ha
+  have ha : A := by
+    apply h hab
+  apply hna ha
 
 end ZFC
