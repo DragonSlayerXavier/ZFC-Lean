@@ -3,21 +3,21 @@ import Lean
 namespace ZFC
 
 -- Hilbert's Axioms
-axiom aff_cons (A : Prop) (B : Prop) : A → (B → A) -- Affirmation of the Consequent
-axiom dist_imp (A : Prop) (B : Prop) (C : Prop) : (A → (B → C)) → ((A → B) → (A → C)) -- Distribution of Implication
-axiom conj_intro (A : Prop) (B : Prop) : A → (B → A ∧ B) -- Conjunction Introduction
-axiom conj_elim_left (A : Prop) (B : Prop) : A ∧ B → A -- Conjunction Elimination Left
-axiom conj_elim_right (A : Prop) (B : Prop) : A ∧ B → B -- Conjunction Elimination Right
-axiom disj_intro_left (A : Prop) (B : Prop) : A → A ∨ B -- Disjunction Introduction Left
-axiom disj_intro_right (A : Prop) (B : Prop) : B → A ∨ B -- Disjunction Introduction Right
-axiom disj_elim (A : Prop) (B : Prop) (C : Prop) : (A → C) → ((B → C) → (A ∨ B → C)) -- Disjunction Elimination
+axiom aff_cons (A B : Prop) : A → (B → A) -- Affirmation of the Consequent
+axiom dist_imp (A B C : Prop) : (A → (B → C)) → ((A → B) → (A → C)) -- Distribution of Implication
+axiom conj_intro (A B : Prop) : A → (B → A ∧ B) -- Conjunction Introduction
+axiom conj_elim_left (A B : Prop) : A ∧ B → A -- Conjunction Elimination Left
+axiom conj_elim_right (A B : Prop) : A ∧ B → B -- Conjunction Elimination Right
+axiom disj_intro_left (A B : Prop) : A → A ∨ B -- Disjunction Introduction Left
+axiom disj_intro_right (A B : Prop) : B → A ∨ B -- Disjunction Introduction Right
+axiom disj_elim (A B C : Prop) : (A → C) → ((B → C) → (A ∨ B → C)) -- Disjunction Elimination
 
 axiom trivial : True -- Axiom of Truth
 axiom neg_intro (A : Prop) : (A → False) → ¬A -- Negation Introduction
 axiom neg_elim (A : Prop) : ¬A → (A → False) -- Negation Elimination
-axiom iff_intro (A : Prop) (B : Prop) : (A → B) → ((B → A) → (A ↔ B)) -- Biconditional Introduction
-axiom iff_elim_left (A : Prop) (B : Prop) : (A ↔ B) → (A → B) -- Biconditional Elimination Left
-axiom iff_elim_right (A : Prop) (B : Prop) : (A ↔ B) → (B → A) -- Biconditional Elimination Right
+axiom iff_intro (A B : Prop) : (A → B) → ((B → A) → (A ↔ B)) -- Biconditional Introduction
+axiom iff_elim_left (A B : Prop) : (A ↔ B) → (A → B) -- Biconditional Elimination Left
+axiom iff_elim_right (A B : Prop) : (A ↔ B) → (B → A) -- Biconditional Elimination Right
 
 -- Rules of Inference
 axiom modus_ponens {P Q : Prop} (h1 : P → Q) (h2 : P) : Q -- Modus Ponens
@@ -31,12 +31,12 @@ theorem self_imp (A : Prop) : A → A := by
   have h4: (A → (A → A)) → (A → A) := by apply modus_ponens h3 h2
   exact modus_ponens h4 h1
 
-theorem imp_trans (A : Prop) (B : Prop) (C : Prop) : (A → B) → (B → C) → (A → C) := by
+theorem imp_trans (A B C : Prop) : (A → B) → (B → C) → (A → C) := by
   intro h1 h2 h3
   have h4 : B := by apply modus_ponens h1 h3
   apply modus_ponens h2 h4
 
-theorem conj_symm (A : Prop) (B : Prop) : A ∧ B → B ∧ A := by
+theorem conj_symm (A B : Prop) : A ∧ B → B ∧ A := by
   intro h
   have h1 : A := by apply conj_elim_left A B h
   have h2 : B := by apply conj_elim_right A B h
@@ -44,14 +44,14 @@ theorem conj_symm (A : Prop) (B : Prop) : A ∧ B → B ∧ A := by
   exact h2
   exact h1
 
-theorem disj_symm (A : Prop) (B : Prop) : A ∨ B → B ∨ A := by
+theorem disj_symm (A B : Prop) : A ∨ B → B ∨ A := by
   intro h
   apply disj_elim A B (B ∨ A)
   apply disj_intro_right B A
   apply disj_intro_left B A
   exact h
 
-theorem conj_assoc (A : Prop) (B : Prop) (C : Prop) : A ∧ (B ∧ C) → (A ∧ B) ∧ C := by
+theorem conj_assoc (A B C : Prop) : A ∧ (B ∧ C) → (A ∧ B) ∧ C := by
   intro h
   have h1 : A := by apply conj_elim_left A (B ∧ C) h
   have h2 : B ∧ C := by apply conj_elim_right A (B ∧ C) h
@@ -63,7 +63,7 @@ theorem conj_assoc (A : Prop) (B : Prop) (C : Prop) : A ∧ (B ∧ C) → (A ∧
   exact h3
   exact h4
 
-theorem disj_assoc (A : Prop) (B : Prop) (C : Prop) : A ∨ (B ∨ C) → (A ∨ B) ∨ C := by
+theorem disj_assoc (A B C : Prop) : A ∨ (B ∨ C) → (A ∨ B) ∨ C := by
   apply disj_elim A (B ∨ C) ((A ∨ B) ∨ C)
   have h1 : A → A ∨ B := by apply disj_intro_left A B
   have h2 : (A ∨ B) → (A ∨ B) ∨ C := by apply disj_intro_left (A ∨ B) C
@@ -76,7 +76,7 @@ theorem disj_assoc (A : Prop) (B : Prop) (C : Prop) : A ∨ (B ∨ C) → (A ∨
   exact h6
   apply disj_intro_right (A ∨ B) C
 
-theorem dist_conj_disj (A : Prop) (B : Prop) (C : Prop) : A ∧ (B ∨ C) → (A ∧ B) ∨ (A ∧ C) := by
+theorem dist_conj_disj (A B C : Prop) : A ∧ (B ∨ C) → (A ∧ B) ∨ (A ∧ C) := by
   intro h
   have h1 : A := by apply conj_elim_left A (B ∨ C) h
   have h2 : B ∨ C := by apply conj_elim_right A (B ∨ C) h
@@ -99,7 +99,7 @@ theorem dist_conj_disj (A : Prop) (B : Prop) (C : Prop) : A ∧ (B ∨ C) → (A
   exact h8
   exact h2
 
-theorem dist_disj_conj (A : Prop) (B : Prop) (C : Prop) : A ∨ (B ∧ C) → (A ∨ B) ∧ (A ∨ C) := by
+theorem dist_disj_conj (A B C : Prop) : A ∨ (B ∧ C) → (A ∨ B) ∧ (A ∨ C) := by
   intro h
   apply disj_elim A (B ∧ C) ((A ∨ B) ∧ (A ∨ C))
   have h1 : A → (A ∨ B) := by apply disj_intro_left A B
@@ -124,7 +124,7 @@ theorem dist_disj_conj (A : Prop) (B : Prop) (C : Prop) : A ∨ (B ∧ C) → (A
   exact h5
   exact h
 
-theorem iff_conj (A : Prop) (B : Prop) (C : Prop) : (A → (B → C)) ↔ (A ∧ B → C) := by
+theorem iff_conj (A B C : Prop) : (A → (B → C)) ↔ (A ∧ B → C) := by
   apply iff_intro (A → (B → C)) (A ∧ B → C)
   have h1 : (A → (B → C)) → ((A ∧ B) → C) := by
     intro h
@@ -142,7 +142,7 @@ theorem iff_conj (A : Prop) (B : Prop) (C : Prop) : (A → (B → C)) ↔ (A ∧
     exact modus_ponens h hab
   exact h2
 
-theorem iff_disj (A : Prop) (B : Prop) (C : Prop) : (A ∨ B → C) ↔ ((A → C) ∧ (B → C)) := by
+theorem iff_disj (A B C : Prop) : (A ∨ B → C) ↔ ((A → C) ∧ (B → C)) := by
   apply iff_intro (A ∨ B → C) ((A → C) ∧ (B → C))
   have h1 : (A ∨ B → C) → ((A → C) ∧ (B → C)) := by
     intro h
@@ -174,7 +174,7 @@ theorem non_contradiction (A : Prop) : ¬(A ∧ ¬A) := by
   have hna : ¬A := by apply conj_elim_right A (¬A) h
   exact neg_elim A hna ha
 
-theorem imp_neg_elim (A : Prop) (B : Prop) : ¬(A → B) → ¬B := by
+theorem imp_neg_elim (A B : Prop) : ¬(A → B) → ¬B := by
   intro h
   intro hb
   have hab : A → B := by
@@ -182,7 +182,7 @@ theorem imp_neg_elim (A : Prop) (B : Prop) : ¬(A → B) → ¬B := by
     exact hb
   exact h hab
 
-theorem imp_contrapositive (A : Prop) (B : Prop) : (A → B) → (¬B → ¬A) := by
+theorem imp_contrapositive (A B : Prop) : (A → B) → (¬B → ¬A) := by
   intro h
   intro hnb
   intro ha
@@ -198,7 +198,7 @@ theorem imp_neg_neg (A :Prop) : A → ¬¬A := by
     exact hna
   exact non_contradiction A hana
 
-theorem disj_neg (A : Prop) (B : Prop) : ¬A ∨ ¬B → ¬(A ∧ B) := by
+theorem disj_neg (A B : Prop) : ¬A ∨ ¬B → ¬(A ∧ B) := by
   intro h
   intro hab
   have ha : A := by apply conj_elim_left A B hab
@@ -213,7 +213,7 @@ theorem disj_neg (A : Prop) (B : Prop) : ¬A ∨ ¬B → ¬(A ∧ B) := by
     exact hdisj
   exact hcont h
 
-theorem de_morgan_disj (A : Prop) (B : Prop) : ¬(A ∨ B) ↔ (¬A ∧ ¬B) := by
+theorem de_morgan_disj (A B : Prop) : ¬(A ∨ B) ↔ (¬A ∧ ¬B) := by
   apply iff_intro (¬(A ∨ B)) (¬A ∧ ¬B)
   have h1 : ¬(A ∨ B) → (¬A ∧ ¬B) := by
     intro h
@@ -263,7 +263,7 @@ theorem not_iff_not_not_not (A : Prop) : ¬A ↔ ¬¬¬A := by
     exact hnna hcont
   exact h2
 
-theorem imp_neg_iff_neg_neg_imp_neg (A : Prop) (B : Prop) : (A → ¬B) ↔ (¬¬A → ¬B) := by
+theorem imp_neg_iff_neg_neg_imp_neg (A B : Prop) : (A → ¬B) ↔ (¬¬A → ¬B) := by
   apply iff_intro (A → ¬B) (¬¬A → ¬B)
   have h1 : (A → ¬B) → (¬¬A → ¬B) := by
     intro h
@@ -290,7 +290,7 @@ theorem imp_neg_iff_neg_neg_imp_neg (A : Prop) (B : Prop) : (A → ¬B) ↔ (¬�
     exact hnb hb
   exact h2
 
-theorem neg_neg_disj_iff_neg_conj_neg (A : Prop) (B : Prop) : ¬¬(A ∨ B) ↔ ¬(¬A ∧ ¬B) := by
+theorem neg_neg_disj_iff_neg_conj_neg (A B : Prop) : ¬¬(A ∨ B) ↔ ¬(¬A ∧ ¬B) := by
   apply iff_intro (¬¬(A ∨ B)) (¬(¬A ∧ ¬B))
   have h1 : ¬¬(A ∨ B) → ¬(¬A ∧ ¬B) := by
     intro hnnaob
@@ -313,7 +313,7 @@ theorem neg_neg_disj_iff_neg_conj_neg (A : Prop) (B : Prop) : ¬¬(A ∨ B) ↔ 
     exact h
   exact h2
 
-theorem neg_neg_imp (A : Prop) (B : Prop) : ¬¬(A → B) → (¬¬A → ¬¬B) := by
+theorem neg_neg_imp (A B : Prop) : ¬¬(A → B) → (¬¬A → ¬¬B) := by
   intro hnnAB
   intro hnnA
   intro hnB
@@ -325,7 +325,7 @@ theorem neg_neg_imp (A : Prop) (B : Prop) : ¬¬(A → B) → (¬¬A → ¬¬B) 
   apply hAB
   exact hA
 
-theorem neg_neg_conj_iff_conj_neg_neg (A : Prop) (B : Prop) : ¬¬(A ∧ B) ↔ (¬¬A ∧ ¬¬B) := by
+theorem neg_neg_conj_iff_conj_neg_neg (A B : Prop) : ¬¬(A ∧ B) ↔ (¬¬A ∧ ¬¬B) := by
   apply iff_intro (¬¬(A ∧ B)) (¬¬A ∧ ¬¬B)
   have h1 : ¬¬(A ∧ B) → (¬¬A ∧ ¬¬B) := by
     intro hnnAB
