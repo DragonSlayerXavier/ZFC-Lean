@@ -25,13 +25,15 @@ theorem neg_to_imp (A B : Prop) : ¬A → (A → B) := by
   rw [←false_iff_conj_neg A] at h1
   apply ex_falso_quodlibet B h1
 
-theorem neg_disj_to_imp (A B : Prop) : ¬(A ∨ B) → (A → B) := by
+theorem neg_disj_to_imp (A B : Prop) : (¬A ∨ B) → (A → B) := by
   intro h
-  intro a
-  have h1 : A ∨ B := by apply disj_intro_left A B a
-  have h2 : (A ∨ B) ∧ ¬(A ∨ B) := by apply conj_intro (A ∨ B) (¬(A ∨ B)) h1 h
-  have h3 : False := by rw [←false_iff_conj_neg (A ∨ B)] at h2; exact h2
-  apply ex_falso_quodlibet B h3
+  intro ha
+  apply disj_elim (¬A) B B
+  intro hna
+  apply neg_to_imp A B hna ha
+  apply self_imp B
+  exact h
+
 
 theorem disj_to_neg_imp (A B : Prop) : (A ∨ B) → (¬A → B) := by
   intro h
