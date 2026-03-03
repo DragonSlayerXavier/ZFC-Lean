@@ -8,11 +8,27 @@ axiom double_neg_elim (A : Prop) : ¬¬A → A
 
 -- Theorems
 
+theorem proof_by_contradiction (A : Prop) : (¬A → False) → A := by
+  intro h
+  apply double_neg_elim A
+  intro hna
+  apply h hna
+
 theorem exc_mid (A : Prop) : A ∨ ¬A := by
-  sorry
+  apply proof_by_contradiction
+  intro h
+  have hna : ¬A := by
+    intro ha
+    apply h
+    apply disj_intro_left A (¬A) ha
+  apply h
+  apply disj_intro_right A (¬A) hna
 
 theorem ex_falso_quod_classical (A : Prop) : False → A := by
-  sorry
+  intro f
+  apply proof_by_contradiction
+  intro h
+  apply f
 
 theorem double_neg_equiv (A : Prop) : A ↔ ¬¬A := by
   have h1 : A → ¬¬A := by
@@ -21,10 +37,6 @@ theorem double_neg_equiv (A : Prop) : A ↔ ¬¬A := by
     intro h
     apply double_neg_elim A h
   exact ⟨h1, h2⟩
-
-#print disj_neg
-
-#print de_morgan_disj
 
 theorem disj_iff_neg_neg_conj (A B : Prop) : (A ∨ B) ↔ ¬(¬A ∧ ¬B) := by
   have h1 : (A ∨ B) → ¬(¬A ∧ ¬B) := by
@@ -75,8 +87,20 @@ theorem imp_iff_neg_disj (A B : Prop) : (A → B) ↔ (¬A ∨ B) := by
 theorem de_morgan_conj (A B : Prop) : ¬(A ∧ B) ↔ (¬A ∨ ¬B) := by
   have h1 : ¬(A ∧ B) → (¬A ∨ ¬B) := by
     intro h
-
-    sorry
+    apply proof_by_contradiction
+    intro h1
+    have ha: A := by
+      apply proof_by_contradiction
+      intro hna
+      apply h1
+      apply disj_intro_left (¬A) (¬B) hna
+    have hb: B := by
+      apply proof_by_contradiction
+      intro hnb
+      apply h1
+      apply disj_intro_right (¬A) (¬B) hnb
+    apply h
+    apply conj_intro A B ha hb
   have h2 : (¬A ∨ ¬B) → ¬(A ∧ B) := by
     intro h
     apply disj_neg A B
