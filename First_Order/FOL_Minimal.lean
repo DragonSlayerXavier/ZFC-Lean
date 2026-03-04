@@ -99,7 +99,7 @@ def is_free_for (s : Term) (x : String) (A : Formula) : Bool :=
 axiom is_provable : Formula → Prop
 
 -- Lifting from Propositional
-def toFOL : Propositional.Formula → Formula
+def toFOL : Propositional.Minimal.Formula → Formula
   | .var s    => .atom s []
   | .bot      => .bot
 
@@ -111,8 +111,8 @@ def toFOL : Propositional.Formula → Formula
   | .neg A    => .imp (toFOL A) .bot
   | .iff A B  => .conj (.imp (toFOL A) (toFOL B)) (.imp (toFOL B) (toFOL A))
 
-axiom lift_prop {A : Propositional.Formula} :
-  Propositional.is_provable A -> is_provable (toFOL A)
+axiom lift_prop {A : Propositional.Minimal.Formula} :
+  Propositional.Minimal.is_provable A -> is_provable (toFOL A)
 
 -- Deduction and Inference
 axiom mp {A B : Formula} : is_provable (A → B) -> is_provable A -> is_provable B
