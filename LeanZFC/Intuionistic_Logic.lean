@@ -1,6 +1,6 @@
 import LeanZFC.Minimal_Logic
 
-namespace ZFC
+namespace Propositional
 
 -- Ex Falso Quodlibet
 axiom ex_falso_quodlibet (A : Prop) : False → A -- From False, anything follows
@@ -101,4 +101,4 @@ theorem conj_false_iff_false (A : Prop) : (A ∧ False) ↔ False := by
     intro f
     apply conj_intro A False (ex_falso_quodlibet A f) f
   exact ⟨h1, h2⟩
-end ZFC
+end Propositional

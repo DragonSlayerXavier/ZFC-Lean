@@ -1,6 +1,6 @@
 import Lean
 
-namespace ZFC
+namespace Propositional
 
 -- Hilbert's Axioms
 axiom aff_cons (A B : Prop) : A → (B → A) -- Affirmation of the Consequent
@@ -359,4 +359,4 @@ theorem neg_neg_conj_iff_conj_neg_neg (A B : Prop) : ¬¬(A ∧ B) ↔ (¬¬A �
     have hab : A ∧ B := by apply conj_intro A B hna hnb
     exact hcont hab
   exact h2
-end ZFC
+end Propositional

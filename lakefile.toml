@@ -4,6 +4,8 @@ defaultTargets = ["lean-zfc"]
 
 [[lean_lib]]
 name = "LeanZFC"
+srcDir = "."
+globs = ["LeanZFC", "Propositional.*", "First_Order.*"]
 
 [[lean_exe]]
 name = "lean-zfc"

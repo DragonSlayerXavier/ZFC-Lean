@@ -1,7 +1,7 @@
 import LeanZFC.Minimal_Logic
 import LeanZFC.Intuionistic_Logic
 
-namespace ZFC
+namespace Propositional
 
 -- Double Negation Elimination
 axiom double_neg_elim (A : Prop) : ¬¬A → A
@@ -168,4 +168,4 @@ theorem peirce (A B : Prop) : (((A → B) → A) → A) := by
     apply h hab
   apply hna ha
 
-end ZFC
+end Propositional
