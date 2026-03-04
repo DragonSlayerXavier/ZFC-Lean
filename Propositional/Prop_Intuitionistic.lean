@@ -2,11 +2,11 @@ import Propositional.Prop_Minimal
 
 namespace Propositional.Intuitionistic
 
-export Propositional(Formula is_provable aff_cons dist_imp conj_intro conj_elim_left conj_elim_right
+export Propositional.Minimal(Formula is_provable aff_cons dist_imp conj_intro conj_elim_left conj_elim_right
   disj_intro_left disj_intro_right disj_elim trivial neg_intro neg_elim
   iff_intro iff_elim_left iff_elim_right mp deduction)
 
-open Propositional
+open Propositional.Minimal
 
 -- Axioms specific to Intuitionistic Logic
 axiom ex_falso (A : Formula) : is_provable (Formula.bot → A)

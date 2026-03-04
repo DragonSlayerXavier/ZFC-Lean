@@ -6,7 +6,7 @@ export Propositional.Intuitionistic(Formula is_provable aff_cons dist_imp conj_i
   disj_intro_left disj_intro_right disj_elim trivial neg_intro neg_elim
   iff_intro iff_elim_left iff_elim_right mp deduction)
 
-open Propositional
+open Propositional.Minimal
 open Propositional.Intuitionistic
 
 -- Axioms specific to Classical Logic

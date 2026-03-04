@@ -1,6 +1,6 @@
 import Lean
 
-namespace Propositional
+namespace Propositional.Minimal
 
 inductive Formula where
 
@@ -171,4 +171,4 @@ theorem double_neg_imp_dist (A B : Formula) : is_provable (¬¬(A → B) → (¬
 theorem double_neg_conj_dist (A B : Formula) : is_provable (¬¬(A ∧ B) ↔ (¬¬A ∧ ¬¬B)) := by
   sorry
 
-end Propositional
+end Propositional.Minimal
