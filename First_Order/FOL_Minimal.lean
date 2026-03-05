@@ -35,6 +35,7 @@ notation:max A " ∨ " B => Formula.disj A B
 notation:max "¬" A     => Formula.imp A Formula.bot
 notation:max "∀ " x ", " A => Formula.all x A
 notation:max "∃ " x ", " A => Formula.exi x A
+notation:max A " ↔ " B => Formula.conj (Formula.imp A B) (Formula.imp B A)
 
 /- 4. Substitution Logic -/
 
@@ -141,5 +142,47 @@ axiom rule_gen {A B : Formula} {x : String} :
 
 axiom rule_exists_elim {A B : Formula} {x : String} :
   is_provable (A → B) -> (is_free_in x B = false) -> is_provable ((∃ x, A) → B)
+
+-- Theorems
+
+theorem forall_vacuous (A : Formula) (x : String) : is_free_in x A = false -> is_provable ((∀ x, A) ↔ A) := by
+  sorry
+
+theorem exists_vacuous (A : Formula) (x : String) : is_free_in x A = false -> is_provable ((∃ x, A) ↔ A) := by
+  sorry
+
+theorem forall_conj_dist (A B : Formula) (x : String) : is_provable ((∀ x, (A ∧ B)) ↔ ((∀ x, A) ∧ (∀ x, B))) := by
+  sorry
+
+theorem exists_conj_dist_left (A B : Formula) (x : String) : is_free_in x B = false -> is_provable ((∃ x, (A ∧ B)) ↔ ((∃ x, A) ∧ B)) := by
+  sorry
+
+theorem forall_disj_dist_left (A B : Formula) (x : String) : is_free_in x B = false -> is_provable ((∀ x, (A ∨ B)) ↔ ((∀ x, A) ∨ B)) := by
+  sorry
+
+theorem exists_disj_dist (A B : Formula) (x : String) : is_provable ((∃ x, (A ∨ B)) ↔ ((∃ x, A) ∨ (∃ x, B))) := by
+  sorry
+
+theorem forall_imp_dist_left (A B : Formula) (x : String) :
+  is_free_in x B = false -> is_provable ((∀ x, (A → B)) ↔ ((∃ x, A) → B)) := by
+  sorry
+
+theorem exists_imp_dist_left (A B : Formula) (x : String) :
+  is_free_in x B = false -> is_provable ((∃ x, (A → B)) → ((∀ x, A) → B)) := by
+  sorry
+
+theorem forall_imp_dist_right (A B : Formula) (x : String) :
+  is_free_in x A = false -> is_provable ((∀ x, (A → B)) ↔ (A → (∀ x, B))) := by
+  sorry
+
+theorem exists_imp_dist_right (A B : Formula) (x : String) :
+  is_free_in x A = false -> is_provable ((∃ x, (A → B)) → (A → (∃ x, B))) := by
+  sorry
+
+theorem neg_exists_iff_forall_neg (A : Formula) (x : String) : is_provable (¬(∃ x, A) ↔ (∀ x, ¬A)) := by
+  sorry
+
+theorem neg_forall_from_exists_neg (A : Formula) (x : String) : is_provable ((∃ x, ¬A) → ¬(∀ x, A)) := by
+  sorry
 
 end FOL.Minimal

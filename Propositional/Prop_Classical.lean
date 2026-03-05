@@ -16,10 +16,10 @@ axiom double_neg_elim (A : Formula) : is_provable (¬¬A → A)
 theorem proof_by_contradiction (A : Formula) : is_provable ((¬A → Formula.bot) → A) := by
   sorry
 
-theorem excluded_middle (A : Formula) : is_provable (A ∨ ¬A) := by
+theorem ex_falso_classical (A : Formula) : is_provable (Formula.bot → A) := by
   sorry
 
-theorem ex_falso_classical (A : Formula) : is_provable (Formula.bot → A) := by
+theorem excluded_middle (A : Formula) : is_provable (A ∨ ¬A) := by
   sorry
 
 theorem double_neg_equiv (A : Formula) : is_provable (A ↔ ¬¬A) := by
