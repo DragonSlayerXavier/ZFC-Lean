@@ -17,6 +17,7 @@ inductive Formula where
 
   | atom : String -> List Term -> Formula
   | bot  : Formula
+  | top  : Formula
   | imp  : Formula -> Formula -> Formula
 
   | conj : Formula -> Formula -> Formula
@@ -55,6 +56,7 @@ def is_free_in (x : String) (A : Formula) : Bool :=
 
   | .atom _ ts => (ts.flatMap freeVarsTerm).contains x
   | .bot => false
+  | .top => false
   | .imp f1 f2 => is_free_in x f1 || is_free_in x f2
   | .conj f1 f2 => is_free_in x f1 || is_free_in x f2
   | .disj f1 f2 => is_free_in x f1 || is_free_in x f2
@@ -66,7 +68,7 @@ def substF (A : Formula) (x : String) (s : Term) : Formula :=
   match A with
   | .atom p ts => .atom p (ts.map (substT · x s))
   | .bot => .bot
-
+  | .top => .top
   | .imp f1 f2 => .imp (substF f1 x s) (substF f2 x s)
   | .conj f1 f2 => .conj (substF f1 x s) (substF f2 x s)
   | .disj f1 f2 => .disj (substF f1 x s) (substF f2 x s)
@@ -81,6 +83,7 @@ def is_free_for (s : Term) (x : String) (A : Formula) : Bool :=
 
   | .atom _ _ => true
   | .bot => true
+  | .top => true
   | .imp f1 f2 => is_free_for s x f1 && is_free_for s x f2
 
   | .conj f1 f2 => is_free_for s x f1 && is_free_for s x f2
@@ -129,6 +132,13 @@ axiom disj_intro_left (A B : Formula) : is_provable (A → (A ∨ B))
 axiom disj_intro_right (A B : Formula) : is_provable (B → (A ∨ B))
 axiom disj_elim (A B C : Formula) : is_provable ((A → C) → ((B → C) → ((A ∨ B) → C)))
 
+axiom trivial : is_provable Formula.top
+axiom neg_intro (A : Formula) : is_provable ((A → Formula.bot) → ¬A)
+axiom neg_elim (A : Formula) : is_provable (¬A → (A → Formula.bot))
+axiom iff_intro (A B : Formula) : is_provable ((A → B) → ((B → A) → (A ↔ B)))
+axiom iff_elim_left (A B : Formula) : is_provable ((A ↔ B) → (A → B))
+axiom iff_elim_right (A B : Formula) : is_provable ((A ↔ B) → (B → A))
+
 -- Quantifier Axioms
 axiom forall_elim (x : String) (A : Formula) (t : Term) :
   (is_free_for t x A = true) → is_provable (∀ x, A) -> is_provable (A⟦x := t⟧)
@@ -146,6 +156,10 @@ axiom rule_exists_elim {A B : Formula} {x : String} :
 -- Theorems
 
 theorem forall_vacuous (A : Formula) (x : String) : is_free_in x A = false -> is_provable ((∀ x, A) ↔ A) := by
+  have hfwd : is_provable ((∀ x, A) → A) := by
+    sorry
+  have hbwd : is_provable (A → (∀ x, A)) := by
+    sorry
   sorry
 
 theorem exists_vacuous (A : Formula) (x : String) : is_free_in x A = false -> is_provable ((∃ x, A) ↔ A) := by
